@@ -1,0 +1,42 @@
+version: "3"
+
+includes:
+  build: "build-tasks.yaml"
+  deps: "dep-tasks.yaml"
+  utils: "tools/yscope-dev-utils/exports/taskfiles/utils/utils.yaml"
+
+vars:
+  G_BUILD_DIR: "{{.ROOT_DIR}}/build"
+  G_BUILD_SPIDER_SIMULATE_DIR: "{{.G_BUILD_DIR}}/spider-simulate"
+  G_SPIDER_SIMULATE_CMAKE_CACHE: "{{.G_BUILD_SPIDER_DIR}}/CMakeCache.txt"
+  G_SPIDER_SIMULATE_COMPILE_COMMANDS_DB: "{{.G_BUILD_SPIDER_DIR}}/compile_commands.json"
+  G_SRC_SPIDER_SIMULATE_DIR: "{{.ROOT_DIR}}/src"
+
+  G_DEPS_DIR: "{{.G_BUILD_DIR}}/deps"
+  # These should be kept in-sync with its usage in CMakeLists.txt
+  G_DEPS_CMAKE_SETTINGS_DIR: "{{.G_DEPS_DIR}}/cmake-settings"
+  G_DEPS_CMAKE_SETTINGS_FILE: "{{.G_DEPS_CMAKE_SETTINGS_DIR}}/settings.cmake"
+
+tasks:
+  clean:
+    cmds:
+      - "rm -rf '{{.G_BUILD_DIR}}'"
+
+  config-cmake-project:
+    internal: true
+    sources:
+      - "{{.TASKFILE}}"
+      - "CMakeLists.txt"
+    generates:
+      - "{{.G_SPIDER_SIMULATE_CMAKE_CACHE}}"
+      - "{{.G_SPIDER_SIMULATE_COMPILE_COMMANDS_DB}}"
+    cmds:
+      - "cmake -S '{{.ROOT_DIR}}' -B '{{.G_BUILD_SPIDER_SIMULATE_DIR}}'"
+
+  init:
+    internal: true
+    silent: true
+    run: "once"
+    cmds:
+      - "mkdir -p '{{.G_BUILD_DIR}}'"
+      - "mkdir -p '{{.G_BUILD_SPIDER_SIMULATE_DIR}}'"
