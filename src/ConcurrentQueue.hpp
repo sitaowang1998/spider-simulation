@@ -44,6 +44,11 @@ public:
         return result;
     }
 
+    auto empty() -> bool {
+        std::lock_guard<std::mutex> lock{m_mutex};
+        return m_queue.empty();
+    }
+
 private:
     std::mutex m_mutex;
     std::deque<T> m_queue;
