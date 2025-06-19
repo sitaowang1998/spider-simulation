@@ -7,6 +7,7 @@
 #include <spdlog/spdlog.h>
 #include <spider/storage/mysql/MySqlStorageFactory.hpp>
 
+#include "HeartbeatThread.hpp"
 #include "JobGenerator.hpp"
 #include "spider/storage/mysql/MySqlConnection.hpp"
 
@@ -45,9 +46,7 @@ auto main(int argc, char* argv[]) -> int {
     // Set up spdlog to write to stderr
     // NOLINTNEXTLINE(misc-include-cleaner)
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [spider.scheduler] %v");
-#ifndef NDEBUG
     spdlog::set_level(spdlog::level::trace);
-#endif
 
     boost::program_options::variables_map args = parse_options(argc, argv);
 
@@ -74,6 +73,15 @@ auto main(int argc, char* argv[]) -> int {
         return cCmdArgParseError;
     }
 
+    std::vector<boost::uuids::uuid> worker_ids;
+    worker_ids.reserve(num_workers);
+    boost::uuids::random_generator uuid_gen;
+    for (size_t i = 0; i < num_workers; ++i) {
+        worker_ids.emplace_back(uuid_gen());
+    }
+    boost::uuids::uuid scheduler_id = uuid_gen();
+    boost::uuids::uuid client_id = uuid_gen();
+
     {
         spider::core::MySqlStorageFactory storage_factory{storage_url};
         auto conn_result = storage_factory.provide_storage_connection();
@@ -96,10 +104,27 @@ auto main(int argc, char* argv[]) -> int {
             return cCmdArgParseError;
         }
 
+        // Add drivers
+        for (auto const& driver_id : worker_ids) {
+            storage_error = metadata_store->add_driver(conn, spider::core::Driver{driver_id});
+            if (!storage_error.success()) {
+                spdlog::error("Failed to add driver {}: {}", boost::uuids::to_string(driver_id), storage_error.description);
+                return cCmdArgParseError;
+            }
+        }
+        storage_error = metadata_store->add_scheduler(conn, spider::core::Scheduler{scheduler_id, "localhost", 4343});
+        if (!storage_error.success()) {
+            spdlog::error("Failed to add scheduler {}: {}", boost::uuids::to_string(scheduler_id), storage_error.description);
+            return cCmdArgParseError;
+        }
+        storage_error = metadata_store->add_driver(conn, spider::core::Driver{client_id});
+        if (!storage_error.success()) {
+            spdlog::error("Failed to add client {}: {}", boost::uuids::to_string(client_id), storage_error.description);
+            return cCmdArgParseError;
+        }
+
         // Generate jobs and store them in the database
         simulation::JobGenerator job_generator{num_jobs};
-        boost::uuids::random_generator uuid_gen;
-        auto client_id = uuid_gen();
         auto job_batch = storage_factory.provide_job_submission_batch(conn);
         while (job_generator.next()) {
             auto job = job_generator.get();
@@ -119,5 +144,14 @@ auto main(int argc, char* argv[]) -> int {
         job_batch->submit_batch(conn);
     }
 
+    simulation::HeartbeatThread heartbeat_thread{storage_url, worker_ids, scheduler_id, client_id};
 
+    auto start = std::chrono::steady_clock::now();
+    heartbeat_thread.start();
+
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    spdlog::info("Execution takes {} ms", duration.count());
+    heartbeat_thread.request_stop();
+    heartbeat_thread.wait();
 }

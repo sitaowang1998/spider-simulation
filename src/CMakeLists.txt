@@ -2,6 +2,8 @@
 set(SPIDER_SIMULATION_SOURCES
     simulate.cpp
     ConcurrentQueue.hpp
+    HeartbeatThread.cpp
+    HeartbeatThread.hpp
     JobGenerator.cpp
     JobGenerator.hpp
 )
