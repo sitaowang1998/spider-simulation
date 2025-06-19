@@ -8,6 +8,8 @@ set(SPIDER_SIMULATION_SOURCES
     JobGenerator.hpp
     TaskQueue.hpp
     TaskQueue.cpp
+    WorkerThread.cpp
+    WorkerThread.hpp
 )
 
 add_executable(spider-simulation)

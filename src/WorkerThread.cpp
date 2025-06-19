@@ -1,0 +1,106 @@
+#include "WorkerThread.hpp"
+
+#include <chrono>
+#include <string>
+#include <thread>
+#include <variant>
+#include <vector>
+
+#include <spdlog/spdlog.h>
+#include <spider/core/Error.hpp>
+#include <spider/core/Task.hpp>
+#include <spider/storage/mysql/MySqlStorageFactory.hpp>
+
+#include "Channel.hpp"
+#include "TaskQueue.hpp"
+
+namespace simulation {
+
+WorkerThread::WorkerThread(std::string const& storage_url, int num_workers, TaskQueue& task_queue, Channel<size_t>& channel)
+    : m_storage_url{storage_url},
+      m_num_workers{num_workers},
+      m_task_queue{task_queue},
+      m_channel{channel}
+{}
+
+auto WorkerThread::get_task(spider::core::ScheduleTaskMetadata const& task_metadata,
+    spider::core::TaskInstance& task_instance) -> spider::core::StorageErr {
+    auto storage_factory = spider::core::MySqlStorageFactory{m_storage_url};
+    auto metadata_store = storage_factory.provide_metadata_storage();
+    auto conn_result = storage_factory.provide_storage_connection();
+    if (std::holds_alternative<spider::core::StorageErr>(conn_result)) {
+        spdlog::error("Failed to connect to storage: {}", std::get<spider::core::StorageErr>(conn_result).description);
+        return std::get<spider::core::StorageErr>(conn_result);
+    }
+    auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
+    task_instance.task_id = task_metadata.get_id();
+    auto err = metadata_store->create_task_instance(conn, task_instance);
+    spider::core::Task task{""};
+    err = metadata_store->get_task(conn, task_metadata.get_id(), &task);
+    if (!err.success()) {
+        spdlog::error("Failed to get task {}: {}", task_metadata.get_id(), err.description);
+        return err;
+    }
+    err = metadata_store->set_task_running(conn, task_metadata.get_id());
+    if (!err.success()) {
+        spdlog::error("Failed to set task {} as running: {}", task_metadata.get_id(), err.description);
+        return err;
+    }
+    return {};
+}
+
+auto WorkerThread::submit_task(spider::core::TaskInstance const &task_instance) -> spider::core::StorageErr {
+    auto storage_factory = spider::core::MySqlStorageFactory{m_storage_url};
+    auto metadata_store = storage_factory.provide_metadata_storage();
+    auto conn_result = storage_factory.provide_storage_connection();
+    if (std::holds_alternative<spider::core::StorageErr>(conn_result)) {
+        spdlog::error("Failed to connect to storage: {}", std::get<spider::core::StorageErr>(conn_result).description);
+        return std::get<spider::core::StorageErr>(conn_result);
+    }
+    auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
+    auto err = metadata_store->task_finish(conn, task_instance, {spider::core::TaskOutput{"0", "int"}});
+    if (!err.success()) {
+        spdlog::error("Failed to finish task {}: {}", task_instance.task_id, err.description);
+        return err;
+    }
+    return {};
+}
+
+auto WorkerThread::start() -> void {
+    m_thread = std::jthread([this](std::stop_token stop_token) {
+        while (!stop_token.stop_requested()) {
+            std::vector<spider::core::ScheduleTaskMetadata> tasks = m_task_queue.batch_pop(m_num_workers);
+            if (tasks.empty()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                continue;
+            }
+            std::vector<spider::core::TaskInstance> task_instances(tasks.size());
+            for (size_t i = 0; i < tasks.size(); ++i) {
+                auto const err = get_task(tasks[i], task_instances[i]);
+                if (!err.success()) {
+                    spdlog::error("Failed to get task {}: {}", tasks[i].get_id(), err.description);
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(m_task_time));
+            for (auto const& instance : task_instances) {
+                auto const err = submit_task(instance);
+                if (!err.success()) {
+                    spdlog::error("Failed to submit task {}: {}", instance.task_id, err.description);
+                }
+            }
+            m_channel.send(tasks.size());
+        }
+    });
+}
+
+auto WorkerThread::request_stop() -> void {
+    m_thread.request_stop();
+}
+
+
+auto WorkerThread::wait() -> void {
+    m_thread.join();
+}
+
+
+}
