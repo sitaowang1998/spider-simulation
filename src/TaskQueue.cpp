@@ -43,6 +43,7 @@ auto TaskQueue::batch_pop(int count) -> std::vector<spider::core::ScheduleTaskMe
         }
     }
     std::vector<spider::core::ScheduleTaskMetadata> result;
+    result.reserve(count);
     for (size_t i = 0; i < count && !m_task_queue.empty(); ++i) {
         result.emplace_back(std::move(m_task_queue.front()));
         m_task_queue.pop_front();
