@@ -10,7 +10,7 @@ template<typename T>
 class Channel {
 public:
 
-    auto push(T const& t) -> void {
+    auto send(T const& t) -> void {
         {
             std::lock_guard lock{m_mutex};
             m_queue.push_back(t);
@@ -18,7 +18,7 @@ public:
         m_cond_var.notify_all();
     }
 
-    auto pop() -> T {
+    auto receive() -> T {
         std::lock_guard lock {m_mutex};
         m_cond_var.wait(lock, [this]{ return !m_queue.empty(); });
         T t = std::move(m_queue.front());
