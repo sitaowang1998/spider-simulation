@@ -1,6 +1,7 @@
 
 set(SPIDER_SIMULATION_SOURCES
     simulate.cpp
+    Channel.hpp
     ConcurrentQueue.hpp
     HeartbeatThread.cpp
     HeartbeatThread.hpp
