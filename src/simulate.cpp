@@ -12,6 +12,7 @@
 #include "HeartbeatThread.hpp"
 #include "JobGenerator.hpp"
 #include "TaskQueue.hpp"
+#include "WorkerThread.hpp"
 
 auto parse_options(int argc, char* argv[]) -> boost::program_options::variables_map {
     boost::program_options::options_description desc;
@@ -72,6 +73,10 @@ auto main(int argc, char* argv[]) -> int {
     if (args.contains("storage-url")) {
         storage_url = args["storage-url"].as<std::string>();
     } else {
+        return cCmdArgParseError;
+    }
+    if (num_workers % num_threads != 0) {
+        spdlog::error("Number of workers ({}) must be a multiple of number of threads ({})", num_workers, num_threads);
         return cCmdArgParseError;
     }
 
@@ -149,13 +154,37 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     simulation::HeartbeatThread heartbeat_thread{storage_url, worker_ids, scheduler_id, client_id};
+    simulation::Channel<size_t> task_finish_channel{};
+    std::vector<simulation::WorkerThread> worker_threads;
+    for (size_t i = 0; i < num_threads; ++i) {
+        worker_threads.emplace_back(
+            storage_url,
+            num_workers / num_threads,
+            task_queue,
+            task_finish_channel
+        );
+    }
 
+    size_t num_task_finish = 0;
     auto start = std::chrono::steady_clock::now();
+    for (auto& worker_thread : worker_threads) {
+        worker_thread.start();
+    }
     heartbeat_thread.start();
+
+    while (num_task_finish < num_jobs) {
+        num_task_finish += task_finish_channel.receive();
+    }
 
     auto end = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     spdlog::info("Execution takes {} ms", duration.count());
+    for (auto& worker_thread : worker_threads) {
+        worker_thread.request_stop();
+    }
     heartbeat_thread.request_stop();
+    for (auto& worker_thread : worker_threads) {
+        worker_thread.wait();
+    }
     heartbeat_thread.wait();
 }
