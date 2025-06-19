@@ -2,13 +2,12 @@
 set(SPIDER_SIMULATION_SOURCES
     simulate.cpp
     Channel.hpp
-    ConcurrentQueue.hpp
     HeartbeatThread.cpp
     HeartbeatThread.hpp
     JobGenerator.cpp
     JobGenerator.hpp
-    SchedulerThread.cpp
-    SchedulerThread.hpp
+    TaskQueue.hpp
+    TaskQueue.cpp
 )
 
 add_executable(spider-simulation)
