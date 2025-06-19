@@ -5,11 +5,14 @@
 #include <boost/program_options.hpp>
 #include <boost/uuid.hpp>
 #include <spdlog/spdlog.h>
+#include <spider/core/Task.hpp>
+#include <spider/storage/mysql/MySqlConnection.hpp>
 #include <spider/storage/mysql/MySqlStorageFactory.hpp>
 
+#include "ConcurrentQueue.hpp"
 #include "HeartbeatThread.hpp"
 #include "JobGenerator.hpp"
-#include "spider/storage/mysql/MySqlConnection.hpp"
+#include "SchedulerThread.hpp"
 
 auto parse_options(int argc, char* argv[]) -> boost::program_options::variables_map {
     boost::program_options::options_description desc;
@@ -82,6 +85,8 @@ auto main(int argc, char* argv[]) -> int {
     boost::uuids::uuid scheduler_id = uuid_gen();
     boost::uuids::uuid client_id = uuid_gen();
 
+    simulation::ConcurrentQueue<spider::core::ScheduleTaskMetadata> task_queue;
+
     {
         spider::core::MySqlStorageFactory storage_factory{storage_url};
         auto conn_result = storage_factory.provide_storage_connection();
@@ -145,13 +150,17 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     simulation::HeartbeatThread heartbeat_thread{storage_url, worker_ids, scheduler_id, client_id};
+    simulation::SchedulerThread scheduler_thread{storage_url, scheduler_id, task_queue};
 
     auto start = std::chrono::steady_clock::now();
+    scheduler_thread.start();
     heartbeat_thread.start();
 
     auto end = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     spdlog::info("Execution takes {} ms", duration.count());
+    scheduler_thread.request_stop();
     heartbeat_thread.request_stop();
+    scheduler_thread.wait();
     heartbeat_thread.wait();
 }

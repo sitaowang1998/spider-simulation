@@ -6,6 +6,8 @@ set(SPIDER_SIMULATION_SOURCES
     HeartbeatThread.hpp
     JobGenerator.cpp
     JobGenerator.hpp
+    SchedulerThread.cpp
+    SchedulerThread.hpp
 )
 
 add_executable(spider-simulation)
