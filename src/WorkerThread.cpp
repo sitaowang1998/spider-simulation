@@ -79,7 +79,8 @@ auto WorkerThread::start() -> void {
                 continue;
             }
             auto get_task_start_time = std::chrono::steady_clock::now();
-            std::vector<spider::core::TaskInstance> task_instances(tasks.size());
+            std::vector<spider::core::TaskInstance> task_instances;
+            task_instances.reserve(tasks.size());
             for (size_t i = 0; i < tasks.size(); ++i) {
                 auto const err = get_task(tasks[i], task_instances[i]);
                 if (!err.success()) {
