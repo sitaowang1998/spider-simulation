@@ -1,5 +1,6 @@
 #include "TaskQueue.hpp"
 
+#include <chrono>
 #include <string>
 #include <variant>
 #include <vector>
@@ -29,7 +30,11 @@ auto TaskQueue::batch_pop(int count) -> std::vector<spider::core::ScheduleTaskMe
     if (m_task_queue.empty()) {
         // Fetch tasks from the storage if the queue is empty
         std::vector<spider::core::ScheduleTaskMetadata> tasks;
+        auto const start_time = std::chrono::steady_clock::now();
         auto err = m_store->get_ready_tasks(m_conn, m_scheduler_id, &tasks);
+        auto const end_time = std::chrono::steady_clock::now();
+        auto const duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        spdlog::info("Fetched {} tasks from storage in {} ms", tasks.size(), duration.count());
         if (!err.success()) {
             spdlog::error("Failed to fetch tasks from storage: {}",
                           err.description);
