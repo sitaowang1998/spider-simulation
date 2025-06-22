@@ -6,6 +6,7 @@
 #include <variant>
 #include <vector>
 
+#include <boost/uuid.hpp>
 #include <spdlog/spdlog.h>
 #include <spider/core/Error.hpp>
 #include <spider/core/Task.hpp>
@@ -38,12 +39,12 @@ auto WorkerThread::get_task(spider::core::ScheduleTaskMetadata const& task_metad
     spider::core::Task task{""};
     err = metadata_store->get_task(conn, task_metadata.get_id(), &task);
     if (!err.success()) {
-        spdlog::error("Failed to get task {}: {}", task_metadata.get_id(), err.description);
+        spdlog::error("Failed to get task {}: {}", to_string(task_metadata.get_id()), err.description);
         return err;
     }
     err = metadata_store->set_task_running(conn, task_metadata.get_id());
     if (!err.success()) {
-        spdlog::error("Failed to set task {} as running: {}", task_metadata.get_id(), err.description);
+        spdlog::error("Failed to set task {} as running: {}", to_string(task_metadata.get_id()), err.description);
         return err;
     }
     return {};
@@ -60,7 +61,7 @@ auto WorkerThread::submit_task(spider::core::TaskInstance const &task_instance) 
     auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
     auto err = metadata_store->task_finish(conn, task_instance, {spider::core::TaskOutput{"0", "int"}});
     if (!err.success()) {
-        spdlog::error("Failed to finish task {}: {}", task_instance.task_id, err.description);
+        spdlog::error("Failed to finish task {}: {}", to_string(task_instance.task_id), err.description);
         return err;
     }
     return {};
@@ -79,7 +80,7 @@ auto WorkerThread::start() -> void {
             for (size_t i = 0; i < tasks.size(); ++i) {
                 auto const err = get_task(tasks[i], task_instances[i]);
                 if (!err.success()) {
-                    spdlog::error("Failed to get task {}: {}", tasks[i].get_id(), err.description);
+                    spdlog::error("Failed to get task {}: {}", to_string(tasks[i].get_id()), err.description);
                 }
             }
             auto get_task_end_time = std::chrono::steady_clock::now();
@@ -92,7 +93,7 @@ auto WorkerThread::start() -> void {
             for (auto const& instance : task_instances) {
                 auto const err = submit_task(instance);
                 if (!err.success()) {
-                    spdlog::error("Failed to submit task {}: {}", instance.task_id, err.description);
+                    spdlog::error("Failed to submit task {}: {}", to_string(instance.task_id), err.description);
                 }
             }
             auto submit_task_end_time = std::chrono::steady_clock::now();
