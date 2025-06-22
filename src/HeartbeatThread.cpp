@@ -39,20 +39,20 @@ auto HeartbeatThread::start() -> void {
             for (boost::uuids::uuid const& worker_id : m_worker_ids) {
                 auto err = send_heartbeat(m_storage_url, worker_id);
                 if (!err.success()) {
-                    spdlog::error("Cannot update heartbeat for worker {}: {}", worker_id, err.description);
+                    spdlog::error("Cannot update heartbeat for worker {}: {}", to_string(worker_id), err.description);
                 }
             }
             auto err = send_heartbeat(m_storage_url, m_scheduler_id);
             if (!err.success()) {
-                spdlog::error("Cannot update heartbeat for scheduler {}: {}", m_scheduler_id, err.description);
+                spdlog::error("Cannot update heartbeat for scheduler {}: {}", to_string(m_scheduler_id), err.description);
             }
             err = send_heartbeat(m_storage_url, m_client_id);
             if (!err.success()) {
-                spdlog::error("Cannot update heartbeat for client {}: {}", m_client_id, err.description);
+                spdlog::error("Cannot update heartbeat for client {}: {}", to_string(m_client_id), err.description);
             }
             auto end = std::chrono::system_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            spdlog::info("Heartbeat sent, took {} seconds", duration.count());
+            spdlog::info("Heartbeat sent, took {} milliseconds", duration.count());
             auto sleep_duration = std::chrono::milliseconds(1000) - duration;
             if (sleep_duration > std::chrono::milliseconds(0)) {
                 std::this_thread::sleep_for(sleep_duration);
