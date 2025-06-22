@@ -128,6 +128,7 @@ tasks:
           CMAKE_GEN_ARGS:
             - "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
             - "-DMSGPACK_BUILD_TESTS=OFF"
+            - "-DCMAKE_POLICY_DEFAULT_CMP0074=NEW"
             - "-C {{.G_DEPS_CMAKE_SETTINGS_DIR}}/Boost.cmake"
 
   install-boost:
