@@ -8,7 +8,7 @@
 #include <boost/uuid.hpp>
 #include <spdlog/spdlog.h>
 #include <spider/core/Task.hpp>
-#include <spider/storage/mysql/MySqlConnection.hpp>
+#include <spider/storage/StorageConnection.hpp>
 #include <spider/storage/mysql/MySqlStorageFactory.hpp>
 
 #include "HeartbeatThread.hpp"
@@ -100,7 +100,7 @@ auto main(int argc, char* argv[]) -> int {
             spdlog::error("Failed to connect to the database: {}", std::get<spider::core::StorageErr>(conn_result).description);
             return cCmdArgParseError;
         }
-        auto conn = std::move(std::get<std::unique_ptr<spider::core::MySqlConnection>>(conn_result));
+        auto conn = std::move(std::get<std::unique_ptr<spider::core::StorageConnection>>(conn_result));
         // Initialize databases
         auto metadata_store = storage_factory.provide_metadata_storage();
         auto data_store = storage_factory.provide_data_storage();
