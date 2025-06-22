@@ -88,6 +88,7 @@ tasks:
             - "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
             - "-DSPDLOG_BUILD_TESTS=OFF"
             - "-DUSE_EXTERNAL_FMT=ON"
+            - "-DCMAKE_POLICY_DEFAULT_CMP0074=NEW"
             - "-C {{.G_DEPS_CMAKE_SETTINGS_DIR}}/Boost.cmake"
             - "-C {{.G_DEPS_CMAKE_SETTINGS_DIR}}/fmt.cmake"
 
