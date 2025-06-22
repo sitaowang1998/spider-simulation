@@ -1,4 +1,6 @@
 
+#include <chrono>
+#include <memory>
 #include <string>
 #include <variant>
 
@@ -98,16 +100,16 @@ auto main(int argc, char* argv[]) -> int {
             spdlog::error("Failed to connect to the database: {}", std::get<spider::core::StorageErr>(conn_result).description);
             return cCmdArgParseError;
         }
-        auto conn = std::move(std::get<spider::core::MySqlConnection>(conn_result));
+        auto conn = std::move(std::get<std::unique_ptr<spider::core::MySqlConnection>>(conn_result));
         // Initialize databases
         auto metadata_store = storage_factory.provide_metadata_storage();
         auto data_store = storage_factory.provide_data_storage();
-        auto storage_error = metadata_store->initialize(conn);
+        auto storage_error = metadata_store->initialize(*conn);
         if (!storage_error.success()) {
             spdlog::error("Failed to initialize metadata storage: {}", storage_error.description);
             return cCmdArgParseError;
         }
-        storage_error = data_store->initialize(conn);
+        storage_error = data_store->initialize(*conn);
         if (!storage_error.success()) {
             spdlog::error("Failed to initialize data storage: {}", storage_error.description);
             return cCmdArgParseError;
@@ -115,18 +117,18 @@ auto main(int argc, char* argv[]) -> int {
 
         // Add drivers
         for (auto const& driver_id : worker_ids) {
-            storage_error = metadata_store->add_driver(conn, spider::core::Driver{driver_id});
+            storage_error = metadata_store->add_driver(*conn, spider::core::Driver{driver_id});
             if (!storage_error.success()) {
                 spdlog::error("Failed to add driver {}: {}", boost::uuids::to_string(driver_id), storage_error.description);
                 return cCmdArgParseError;
             }
         }
-        storage_error = metadata_store->add_scheduler(conn, spider::core::Scheduler{scheduler_id, "localhost", 4343});
+        storage_error = metadata_store->add_scheduler(*conn, spider::core::Scheduler{scheduler_id, "localhost", 4343});
         if (!storage_error.success()) {
             spdlog::error("Failed to add scheduler {}: {}", boost::uuids::to_string(scheduler_id), storage_error.description);
             return cCmdArgParseError;
         }
-        storage_error = metadata_store->add_driver(conn, spider::core::Driver{client_id});
+        storage_error = metadata_store->add_driver(*conn, spider::core::Driver{client_id});
         if (!storage_error.success()) {
             spdlog::error("Failed to add client {}: {}", boost::uuids::to_string(client_id), storage_error.description);
             return cCmdArgParseError;
@@ -134,11 +136,11 @@ auto main(int argc, char* argv[]) -> int {
 
         // Generate jobs and store them in the database
         simulation::JobGenerator job_generator{num_jobs};
-        auto job_batch = storage_factory.provide_job_submission_batch(conn);
+        auto job_batch = storage_factory.provide_job_submission_batch(*conn);
         while (job_generator.next()) {
             auto job = job_generator.get();
             storage_error = metadata_store->add_job_batch(
-                conn,
+                *conn,
                 *job_batch,
                 uuid_gen(),
                 client_id,
@@ -150,7 +152,7 @@ auto main(int argc, char* argv[]) -> int {
             }
         }
 
-        job_batch->submit_batch(conn);
+        job_batch->submit_batch(*conn);
     }
 
     simulation::HeartbeatThread heartbeat_thread{storage_url, worker_ids, scheduler_id, client_id};
