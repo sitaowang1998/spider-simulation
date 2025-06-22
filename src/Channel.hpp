@@ -19,8 +19,8 @@ public:
     }
 
     auto receive() -> T {
-        std::lock_guard lock {m_mutex};
-        m_cond_var.wait(lock, [this]() -> bool { return !m_queue.empty(); });
+        std::unique_lock lock {m_mutex};
+        m_cond_var.wait(lock, [this] { return !m_queue.empty(); });
         T t = std::move(m_queue.front());
         m_queue.pop_front();
         return t;
