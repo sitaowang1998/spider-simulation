@@ -1,6 +1,7 @@
 #include "WorkerThread.hpp"
 
 #include <chrono>
+#include <memory>
 #include <string>
 #include <thread>
 #include <variant>
@@ -34,16 +35,16 @@ auto WorkerThread::get_task(spider::core::ScheduleTaskMetadata const& task_metad
         spdlog::error("Failed to connect to storage: {}", err.description);
         return err;
     }
-    auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
+    auto conn = std::move(std::get<std::unique_ptr<spider::core::StorageConnection>>(conn_result));
     task_instance.task_id = task_metadata.get_id();
-    auto err = metadata_store->create_task_instance(conn, task_instance);
+    auto err = metadata_store->create_task_instance(*conn, task_instance);
     spider::core::Task task{""};
-    err = metadata_store->get_task(conn, task_metadata.get_id(), &task);
+    err = metadata_store->get_task(*conn, task_metadata.get_id(), &task);
     if (!err.success()) {
         spdlog::error("Failed to get task {}: {}", to_string(task_metadata.get_id()), err.description);
         return err;
     }
-    err = metadata_store->set_task_running(conn, task_metadata.get_id());
+    err = metadata_store->set_task_running(*conn, task_metadata.get_id());
     if (!err.success()) {
         spdlog::error("Failed to set task {} as running: {}", to_string(task_metadata.get_id()), err.description);
         return err;
@@ -60,8 +61,8 @@ auto WorkerThread::submit_task(spider::core::TaskInstance const &task_instance) 
         spdlog::error("Failed to connect to storage: {}", err.description);
         return err;
     }
-    auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
-    auto err = metadata_store->task_finish(conn, task_instance, {spider::core::TaskOutput{"0", "int"}});
+    auto conn = std::move(std::get<std::unique_ptr<spider::core::StorageConnection>>(conn_result));
+    auto err = metadata_store->task_finish(*conn, task_instance, {spider::core::TaskOutput{"0", "int"}});
     if (!err.success()) {
         spdlog::error("Failed to finish task {}: {}", to_string(task_instance.task_id), err.description);
         return err;

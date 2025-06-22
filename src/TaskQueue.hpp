@@ -19,7 +19,7 @@ public:
     auto batch_pop(int count) -> std::vector<spider::core::ScheduleTaskMetadata>;
 private:
     std::unique_ptr<spider::core::MetadataStorage> m_store;
-    spider::core::StorageConnection m_conn;
+    std::unique_ptr<spider::core::StorageConnection> m_conn;
 
     boost::uuids::uuid m_scheduler_id;
 

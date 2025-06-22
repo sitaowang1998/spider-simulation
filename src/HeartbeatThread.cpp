@@ -1,6 +1,7 @@
 #include "HeartbeatThread.hpp"
 
 #include <chrono>
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
@@ -28,8 +29,8 @@ auto send_heartbeat(std::string const& storage_url, boost::uuids::uuid const& dr
     if (std::holds_alternative<spider::core::StorageErr>(conn_result)) {
         return std::get<spider::core::StorageErr>(conn_result);
     }
-    auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
-    return metadata_store->update_heartbeat(conn, driver_id);
+    auto conn = std::move(std::get<std::unique_ptr<spider::core::StorageConnection>>(conn_result));
+    return metadata_store->update_heartbeat(*conn, driver_id);
 }
 
 auto HeartbeatThread::start() -> void {
