@@ -74,6 +74,7 @@ auto WorkerThread::start() -> void {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
                 continue;
             }
+            auto get_task_start_time = std::chrono::steady_clock::now();
             std::vector<spider::core::TaskInstance> task_instances(tasks.size());
             for (size_t i = 0; i < tasks.size(); ++i) {
                 auto const err = get_task(tasks[i], task_instances[i]);
@@ -81,13 +82,23 @@ auto WorkerThread::start() -> void {
                     spdlog::error("Failed to get task {}: {}", tasks[i].get_id(), err.description);
                 }
             }
+            auto get_task_end_time = std::chrono::steady_clock::now();
+            auto get_task_duration = std::chrono::duration_cast<std::chrono::milliseconds>(get_task_end_time - get_task_start_time);
+            spdlog::info("Get task duration: {} ms", get_task_duration.count());
+
             std::this_thread::sleep_for(std::chrono::seconds(m_task_time));
+
+            auto submit_task_start_time = std::chrono::steady_clock::now();
             for (auto const& instance : task_instances) {
                 auto const err = submit_task(instance);
                 if (!err.success()) {
                     spdlog::error("Failed to submit task {}: {}", instance.task_id, err.description);
                 }
             }
+            auto submit_task_end_time = std::chrono::steady_clock::now();
+            auto submit_task_duration = std::chrono::duration_cast<std::chrono::milliseconds>(submit_task_end_time - submit_task_start_time);
+            spdlog::info("Submit task duration: {} ms", submit_task_duration.count());
+
             m_channel.send(tasks.size());
         }
     });
