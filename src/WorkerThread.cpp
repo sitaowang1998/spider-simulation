@@ -30,8 +30,9 @@ auto WorkerThread::get_task(spider::core::ScheduleTaskMetadata const& task_metad
     auto metadata_store = storage_factory.provide_metadata_storage();
     auto conn_result = storage_factory.provide_storage_connection();
     if (std::holds_alternative<spider::core::StorageErr>(conn_result)) {
-        spdlog::error("Failed to connect to storage: {}", std::get<spider::core::StorageErr>(conn_result).description);
-        return std::get<spider::core::StorageErr>(conn_result);
+        auto const err = std::get<spider::core::StorageErr>(conn_result);
+        spdlog::error("Failed to connect to storage: {}", err.description);
+        return err;
     }
     auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
     task_instance.task_id = task_metadata.get_id();
@@ -55,8 +56,9 @@ auto WorkerThread::submit_task(spider::core::TaskInstance const &task_instance) 
     auto metadata_store = storage_factory.provide_metadata_storage();
     auto conn_result = storage_factory.provide_storage_connection();
     if (std::holds_alternative<spider::core::StorageErr>(conn_result)) {
-        spdlog::error("Failed to connect to storage: {}", std::get<spider::core::StorageErr>(conn_result).description);
-        return std::get<spider::core::StorageErr>(conn_result);
+        auto const err = std::get<spider::core::StorageErr>(conn_result);
+        spdlog::error("Failed to connect to storage: {}", err.description);
+        return err;
     }
     auto conn = std::move(std::get<spider::core::StorageConnection>(conn_result));
     auto err = metadata_store->task_finish(conn, task_instance, {spider::core::TaskOutput{"0", "int"}});
