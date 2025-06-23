@@ -77,6 +77,7 @@ auto WorkerThread::start() -> void {
             std::vector<spider::core::TaskInstance> task_instances;
             task_instances.reserve(tasks.size());
             for (size_t i = 0; i < tasks.size(); ++i) {
+	        task_instances.emplace_back(tasks[i].get_id());
                 auto const err = get_task(tasks[i], task_instances[i]);
                 if (!err.success()) {
                     spdlog::error("Failed to get task {}: {}", to_string(tasks[i].get_id()), err.description);
