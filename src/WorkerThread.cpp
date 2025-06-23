@@ -44,11 +44,6 @@ auto WorkerThread::get_task(spider::core::ScheduleTaskMetadata const& task_metad
         spdlog::error("Failed to get task {}: {}", to_string(task_metadata.get_id()), err.description);
         return err;
     }
-    err = metadata_store->set_task_running(*conn, task_metadata.get_id());
-    if (!err.success()) {
-        spdlog::error("Failed to set task {} as running: {}", to_string(task_metadata.get_id()), err.description);
-        return err;
-    }
     return {};
 }
 
