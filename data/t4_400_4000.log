@@ -1,0 +1,134 @@
+[2025-06-23 10:47:58.756] [info] [spider.scheduler] Fetched 4000 tasks from storage in 148 ms
+[2025-06-23 10:47:59.530] [info] [spider.scheduler] Get task duration: 773 ms
+[2025-06-23 10:47:59.553] [info] [spider.scheduler] Get task duration: 796 ms
+[2025-06-23 10:47:59.571] [info] [spider.scheduler] Get task duration: 814 ms
+[2025-06-23 10:47:59.600] [info] [spider.scheduler] Get task duration: 843 ms
+[2025-06-23 10:48:00.624] [info] [spider.scheduler] Heartbeat sent, took 2016 milliseconds
+[2025-06-23 10:48:02.845] [info] [spider.scheduler] Heartbeat sent, took 2221 milliseconds
+[2025-06-23 10:48:04.406] [info] [spider.scheduler] Submit task duration: 875 ms
+[2025-06-23 10:48:04.449] [info] [spider.scheduler] Submit task duration: 895 ms
+[2025-06-23 10:48:04.456] [info] [spider.scheduler] Submit task duration: 884 ms
+[2025-06-23 10:48:04.479] [info] [spider.scheduler] Submit task duration: 878 ms
+[2025-06-23 10:48:05.187] [info] [spider.scheduler] Heartbeat sent, took 2341 milliseconds
+[2025-06-23 10:48:05.263] [info] [spider.scheduler] Get task duration: 857 ms
+[2025-06-23 10:48:05.348] [info] [spider.scheduler] Get task duration: 891 ms
+[2025-06-23 10:48:05.354] [info] [spider.scheduler] Get task duration: 905 ms
+[2025-06-23 10:48:05.360] [info] [spider.scheduler] Get task duration: 880 ms
+[2025-06-23 10:48:07.369] [info] [spider.scheduler] Heartbeat sent, took 2181 milliseconds
+[2025-06-23 10:48:09.011] [info] [spider.scheduler] Heartbeat sent, took 1642 milliseconds
+[2025-06-23 10:48:09.963] [info] [spider.scheduler] Submit task duration: 700 ms
+[2025-06-23 10:48:10.070] [info] [spider.scheduler] Submit task duration: 709 ms
+[2025-06-23 10:48:10.086] [info] [spider.scheduler] Submit task duration: 732 ms
+[2025-06-23 10:48:10.091] [info] [spider.scheduler] Submit task duration: 743 ms
+[2025-06-23 10:48:10.580] [info] [spider.scheduler] Heartbeat sent, took 1568 milliseconds
+[2025-06-23 10:48:10.728] [info] [spider.scheduler] Get task duration: 764 ms
+[2025-06-23 10:48:10.833] [info] [spider.scheduler] Get task duration: 763 ms
+[2025-06-23 10:48:10.863] [info] [spider.scheduler] Get task duration: 776 ms
+[2025-06-23 10:48:10.867] [info] [spider.scheduler] Get task duration: 775 ms
+[2025-06-23 10:48:11.746] [info] [spider.scheduler] Heartbeat sent, took 1166 milliseconds
+[2025-06-23 10:48:12.986] [info] [spider.scheduler] Heartbeat sent, took 1239 milliseconds
+[2025-06-23 10:48:14.026] [info] [spider.scheduler] Heartbeat sent, took 1039 milliseconds
+[2025-06-23 10:48:15.086] [info] [spider.scheduler] Heartbeat sent, took 1060 milliseconds
+[2025-06-23 10:48:15.171] [info] [spider.scheduler] Submit task duration: 443 ms
+[2025-06-23 10:48:15.413] [info] [spider.scheduler] Submit task duration: 579 ms
+[2025-06-23 10:48:15.442] [info] [spider.scheduler] Submit task duration: 578 ms
+[2025-06-23 10:48:15.474] [info] [spider.scheduler] Submit task duration: 607 ms
+[2025-06-23 10:48:15.963] [info] [spider.scheduler] Get task duration: 791 ms
+[2025-06-23 10:48:16.114] [info] [spider.scheduler] Get task duration: 700 ms
+[2025-06-23 10:48:16.136] [info] [spider.scheduler] Get task duration: 693 ms
+[2025-06-23 10:48:16.161] [info] [spider.scheduler] Get task duration: 686 ms
+[2025-06-23 10:48:16.441] [info] [spider.scheduler] Heartbeat sent, took 1354 milliseconds
+[2025-06-23 10:48:17.465] [info] [spider.scheduler] Heartbeat sent, took 1024 milliseconds
+[2025-06-23 10:48:18.512] [info] [spider.scheduler] Heartbeat sent, took 1046 milliseconds
+[2025-06-23 10:48:19.579] [info] [spider.scheduler] Heartbeat sent, took 1067 milliseconds
+[2025-06-23 10:48:20.698] [info] [spider.scheduler] Submit task duration: 734 ms
+[2025-06-23 10:48:20.790] [info] [spider.scheduler] Submit task duration: 675 ms
+[2025-06-23 10:48:20.807] [info] [spider.scheduler] Submit task duration: 670 ms
+[2025-06-23 10:48:20.817] [info] [spider.scheduler] Submit task duration: 655 ms
+[2025-06-23 10:48:20.868] [info] [spider.scheduler] Heartbeat sent, took 1289 milliseconds
+[2025-06-23 10:48:21.178] [info] [spider.scheduler] Get task duration: 480 ms
+[2025-06-23 10:48:21.317] [info] [spider.scheduler] Get task duration: 527 ms
+[2025-06-23 10:48:21.335] [info] [spider.scheduler] Get task duration: 518 ms
+[2025-06-23 10:48:21.343] [info] [spider.scheduler] Get task duration: 536 ms
+[2025-06-23 10:48:21.950] [info] [spider.scheduler] Heartbeat sent, took 1082 milliseconds
+[2025-06-23 10:48:22.997] [info] [spider.scheduler] Heartbeat sent, took 1046 milliseconds
+[2025-06-23 10:48:24.039] [info] [spider.scheduler] Heartbeat sent, took 1041 milliseconds
+[2025-06-23 10:48:25.069] [info] [spider.scheduler] Heartbeat sent, took 1030 milliseconds
+[2025-06-23 10:48:25.777] [info] [spider.scheduler] Submit task duration: 598 ms
+[2025-06-23 10:48:26.048] [info] [spider.scheduler] Submit task duration: 730 ms
+[2025-06-23 10:48:26.060] [info] [spider.scheduler] Submit task duration: 716 ms
+[2025-06-23 10:48:26.065] [info] [spider.scheduler] Submit task duration: 729 ms
+[2025-06-23 10:48:26.374] [info] [spider.scheduler] Heartbeat sent, took 1304 milliseconds
+[2025-06-23 10:48:26.449] [info] [spider.scheduler] Get task duration: 672 ms
+[2025-06-23 10:48:26.553] [info] [spider.scheduler] Get task duration: 505 ms
+[2025-06-23 10:48:26.559] [info] [spider.scheduler] Get task duration: 498 ms
+[2025-06-23 10:48:26.575] [info] [spider.scheduler] Get task duration: 510 ms
+[2025-06-23 10:48:27.443] [info] [spider.scheduler] Heartbeat sent, took 1068 milliseconds
+[2025-06-23 10:48:28.505] [info] [spider.scheduler] Heartbeat sent, took 1062 milliseconds
+[2025-06-23 10:48:29.650] [info] [spider.scheduler] Heartbeat sent, took 1144 milliseconds
+[2025-06-23 10:48:30.823] [info] [spider.scheduler] Heartbeat sent, took 1173 milliseconds
+[2025-06-23 10:48:31.049] [info] [spider.scheduler] Submit task duration: 599 ms
+[2025-06-23 10:48:31.101] [info] [spider.scheduler] Submit task duration: 542 ms
+[2025-06-23 10:48:31.103] [info] [spider.scheduler] Submit task duration: 527 ms
+[2025-06-23 10:48:31.106] [info] [spider.scheduler] Submit task duration: 553 ms
+[2025-06-23 10:48:31.702] [info] [spider.scheduler] Get task duration: 652 ms
+[2025-06-23 10:48:31.734] [info] [spider.scheduler] Get task duration: 631 ms
+[2025-06-23 10:48:31.742] [info] [spider.scheduler] Get task duration: 641 ms
+[2025-06-23 10:48:31.744] [info] [spider.scheduler] Get task duration: 637 ms
+[2025-06-23 10:48:31.941] [info] [spider.scheduler] Heartbeat sent, took 1117 milliseconds
+[2025-06-23 10:48:33.101] [info] [spider.scheduler] Heartbeat sent, took 1159 milliseconds
+[2025-06-23 10:48:34.165] [info] [spider.scheduler] Heartbeat sent, took 1064 milliseconds
+[2025-06-23 10:48:35.224] [info] [spider.scheduler] Heartbeat sent, took 1059 milliseconds
+[2025-06-23 10:48:36.230] [info] [spider.scheduler] Submit task duration: 527 ms
+[2025-06-23 10:48:36.235] [info] [spider.scheduler] Submit task duration: 500 ms
+[2025-06-23 10:48:36.254] [info] [spider.scheduler] Submit task duration: 509 ms
+[2025-06-23 10:48:36.265] [info] [spider.scheduler] Submit task duration: 522 ms
+[2025-06-23 10:48:36.377] [info] [spider.scheduler] Heartbeat sent, took 1152 milliseconds
+[2025-06-23 10:48:37.018] [info] [spider.scheduler] Get task duration: 788 ms
+[2025-06-23 10:48:37.031] [info] [spider.scheduler] Get task duration: 776 ms
+[2025-06-23 10:48:37.057] [info] [spider.scheduler] Get task duration: 811 ms
+[2025-06-23 10:48:37.081] [info] [spider.scheduler] Get task duration: 815 ms
+[2025-06-23 10:48:38.350] [info] [spider.scheduler] Heartbeat sent, took 1973 milliseconds
+[2025-06-23 10:48:40.554] [info] [spider.scheduler] Heartbeat sent, took 2203 milliseconds
+[2025-06-23 10:48:41.899] [info] [spider.scheduler] Submit task duration: 881 ms
+[2025-06-23 10:48:41.926] [info] [spider.scheduler] Submit task duration: 868 ms
+[2025-06-23 10:48:41.932] [info] [spider.scheduler] Submit task duration: 901 ms
+[2025-06-23 10:48:41.982] [info] [spider.scheduler] Submit task duration: 900 ms
+[2025-06-23 10:48:42.685] [info] [spider.scheduler] Get task duration: 786 ms
+[2025-06-23 10:48:42.706] [info] [spider.scheduler] Get task duration: 773 ms
+[2025-06-23 10:48:42.711] [info] [spider.scheduler] Get task duration: 784 ms
+[2025-06-23 10:48:42.765] [info] [spider.scheduler] Heartbeat sent, took 2210 milliseconds
+[2025-06-23 10:48:42.777] [info] [spider.scheduler] Get task duration: 794 ms
+[2025-06-23 10:48:44.965] [info] [spider.scheduler] Heartbeat sent, took 2200 milliseconds
+[2025-06-23 10:48:47.317] [info] [spider.scheduler] Heartbeat sent, took 2352 milliseconds
+[2025-06-23 10:48:47.530] [info] [spider.scheduler] Submit task duration: 843 ms
+[2025-06-23 10:48:47.546] [info] [spider.scheduler] Submit task duration: 834 ms
+[2025-06-23 10:48:47.546] [info] [spider.scheduler] Submit task duration: 840 ms
+[2025-06-23 10:48:47.599] [info] [spider.scheduler] Submit task duration: 821 ms
+[2025-06-23 10:48:48.230] [info] [spider.scheduler] Get task duration: 700 ms
+[2025-06-23 10:48:48.234] [info] [spider.scheduler] Get task duration: 687 ms
+[2025-06-23 10:48:48.255] [info] [spider.scheduler] Get task duration: 709 ms
+[2025-06-23 10:48:48.299] [info] [spider.scheduler] Get task duration: 699 ms
+[2025-06-23 10:48:49.317] [info] [spider.scheduler] Heartbeat sent, took 1999 milliseconds
+[2025-06-23 10:48:51.553] [info] [spider.scheduler] Heartbeat sent, took 2235 milliseconds
+[2025-06-23 10:48:52.976] [info] [spider.scheduler] Submit task duration: 745 ms
+[2025-06-23 10:48:52.976] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:52.991] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:52.992] [info] [spider.scheduler] Submit task duration: 758 ms
+[2025-06-23 10:48:52.993] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:52.996] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:52.998] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.001] [info] [spider.scheduler] Submit task duration: 745 ms
+[2025-06-23 10:48:53.002] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.003] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.004] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.008] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.008] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.010] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.014] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.014] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.016] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.017] [info] [spider.scheduler] Submit task duration: 718 ms
+[2025-06-23 10:48:53.017] [info] [spider.scheduler] Execution takes 54409 ms
+[2025-06-23 10:48:53.018] [info] [spider.scheduler] Fetched 0 tasks from storage in 0 ms
+[2025-06-23 10:48:53.693] [info] [spider.scheduler] Heartbeat sent, took 2140 milliseconds
