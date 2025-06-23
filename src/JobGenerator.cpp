@@ -15,7 +15,8 @@ auto JobGenerator::next() -> bool {
 
 auto JobGenerator::get() -> spider::core::TaskGraph {
     spider::core::Task task{"task"};
-    task.add_input(spider::core::TaskInput{0, "int"});
+    auto task_input = spider::core::TaskInput{"0", "int"};
+    task.add_input(task_input);
     task.add_output(spider::core::TaskOutput{"int"});
     spider::core::TaskGraph graph;
     graph.add_task(task);
